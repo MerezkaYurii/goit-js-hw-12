@@ -8,7 +8,13 @@
     <link rel="stylesheet" href="./css/styles.css" />
   </head>
   <body>
-  
+    <form class="form">
+      <input type="text" class="input-text" name="category" placeholder="Search images...">
+      <button class="button-img js-button" type="submit">Start</button>
+    </form>
+    <div  class="hidden js-hidden">Loading images, please wait...</div>
+    <div class="gallery"></div>
+    <button class="button-load-more load-more-hidden" type="button">Load more</button>
 
     <script type="module" src="./main.js"></script>
   </body>
