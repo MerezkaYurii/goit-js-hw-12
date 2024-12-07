@@ -106,7 +106,7 @@ let litebox = new SimpleLightbox('.gallery a', {
 
 
 
-let page = 33;
+let page = 1;
 async function handelLoadeMore(){
 page += 1;
 
