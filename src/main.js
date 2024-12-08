@@ -37,7 +37,7 @@ if(!category) {
   iziToast.error({
     // title: 'Error',
     message: "Sorry, there are no images matching your search query. Please try again!",
-    iconUrl: "../img/error.png",  
+    iconUrl: "../img/error.svg",  
     iconColor: '#fff',
     imageWidth: 15,
     messageColor: '#fff',
@@ -59,7 +59,7 @@ if(data.hits.length === 0){
   iziToast.error({
     // title: 'Error',
     message:  "No images found", 
-    iconUrl: "../img/error.png",  
+    iconUrl: "../img/error.svg",  
     iconColor: '#fff',
     imageWidth: 15,
     messageColor: '#fff',
@@ -80,15 +80,17 @@ if(data.hits.length * page < data.totalHits){
 
   })
    .catch((error) => {
-  iziToast.error({
-    // title: 'Error',
-    message:   "Error fetching images. Please try again.", 
-    iconUrl: "../img/error.png",  
-    iconColor: '#fff',
-    imageWidth: 15,
-    messageColor: '#fff',
-    titleColor: '#fff',
-  });
+    console.log(error.message);
+    
+  // iziToast.error({
+  //   // title: 'Error',
+  //   message:   "Error fetching images. Please try again.", 
+  //   iconUrl: "../img/error.svg",  
+  //   iconColor: '#fff',
+  //   imageWidth: 15,
+  //   messageColor: '#fff',
+  //   titleColor: '#fff',
+  // });
  })
 .finally (() => {
   event.target.reset()
@@ -98,11 +100,7 @@ if(data.hits.length * page < data.totalHits){
 
 
 
-let litebox = new SimpleLightbox('.gallery a', {
-  captionsData: 'alt',
-  captionDelay: 250,
-  captionClass: 'imageTitle',
-});
+
 
 
 
@@ -113,22 +111,28 @@ page += 1;
 btnLoadMore.disabled = true;
 
 try{
-  const data = await serchCategory(category, page)
+  const data = await serchCategory(category, page);
  
 containerGallery.insertAdjacentHTML("beforeend", createMarkup(data.hits));
+loading.classList.remove("hidden");
 
 if(data.hits.length * page >= data.totalHits){
   btnLoadMore.classList.replace("button-load-more", "load-more-hidden");
   iziToast.error({
     // title: 'Error',
     message:   "We're sorry, but you've reached the end of search results.", 
-    iconUrl: "../img/error.png",  
+    iconUrl: "../img/error.svg",  
     iconColor: '#fff',
     imageWidth: 15,
     messageColor: '#fff',
     titleColor: '#fff',
   });
   }
+
+
+
+
+
 
 const card = document.querySelector(".img-list");
 window.scrollBy({
@@ -137,14 +141,27 @@ window.scrollBy({
   behavior: "smooth", 
 })
 
+
 }catch(error) { iziToast.error({
   // title: 'Error',
   message:   "We're sorry, but you've reached the end of search results.", 
-  iconUrl: "../img/error.png",  
+  iconUrl: "../img/error.svg",  
   iconColor: '#fff',
   imageWidth: 15,
   messageColor: '#fff',
   titleColor: '#fff',
 });
-} finally{btnLoadMore.disabled = false;}
+} finally{btnLoadMore.disabled = false;
+  loading.classList.add("hidden")
+}
+let litebox = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionDelay: 250,
+  captionClass: 'imageTitle',
+});
+
  }
+
+ 
+
+

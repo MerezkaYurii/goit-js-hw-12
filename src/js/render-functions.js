@@ -36,6 +36,7 @@ export function createMarkup(arr){
     
 
 
+
 if (!box) {
     box = new SimpleLightbox(".gallery a", {
         captionsData: "alt",
@@ -46,7 +47,6 @@ if (!box) {
 }
 
 }
-
 
 
 
