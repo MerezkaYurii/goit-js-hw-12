@@ -96,12 +96,12 @@ if(data.hits.length * page < data.totalHits){
   event.target.reset()
   loading.classList.add("hidden")
 });
+let litebox = new SimpleLightbox('.gallery a', {
+  captionsData: 'alt',
+  captionDelay: 250,
+  captionClass: 'imageTitle',
+});
 }
-
-
-
-
-
 
 
 let page = 1;
@@ -162,6 +162,6 @@ let litebox = new SimpleLightbox('.gallery a', {
 
  }
 
- 
+
 
 
