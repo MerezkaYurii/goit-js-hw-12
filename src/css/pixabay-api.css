@@ -2,7 +2,8 @@
     display: none;
     
   }
-  .js-hidden{text-align: center;}
+  .loading{
+    text-align: center;}
   
   .form {
     display: flex;
