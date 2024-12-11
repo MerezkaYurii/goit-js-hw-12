@@ -1,25 +1,22 @@
-// Описаний у документації
 import iziToast from "izitoast";
-// Додатковий імпорт стилів
 import "izitoast/dist/css/iziToast.min.css";
 
-
-// Описаний у документації
 import SimpleLightbox from "simplelightbox";
-// Додатковий імпорт стилів
 import "simplelightbox/dist/simple-lightbox.min.css";
-
 
 import {serchCategory} from "./js/pixabay-api";
 import {createMarkup, clear} from "./js/render-functions";
-
 
 iziToast.settings({
     position: 'topRight',
   });
 
-
-const loading = document.querySelector(".loading")
+  let litebox = new SimpleLightbox('.gallery a', {
+    captionsData: 'alt',
+    captionDelay: 250,
+    captionClass: 'imageTitle',
+  });
+const loading = document.querySelector(".loading");
 const containerGallery = document.querySelector(".gallery");
 const form = document.querySelector(".form");
 form.addEventListener("submit", submitInput);
@@ -32,8 +29,11 @@ let category ="";
 
  function submitInput (event) {
     event.preventDefault();
-    page = 1;
+    // page = 1;
  category = event.target.elements.category.value.trim();
+
+                              containerGallery.innerHTML = ""; 
+
 if(!category) {
   btnLoadMore.classList.replace("button-load-more", "load-more-hidden");
   iziToast.error({
@@ -51,13 +51,11 @@ if(!category) {
 
 clear();
 loading.classList.remove("hidden");
- 
+  page = 1;
 serchCategory(category, page)
  .then( data => {
-
-
-if(data.hits.length === 0){
- 
+if(!data.hits.length){
+  btnLoadMore.classList.replace("button-load-more", "load-more-hidden");
   iziToast.error({
     // title: 'Error',
     message:  "No images found", 
@@ -71,35 +69,41 @@ if(data.hits.length === 0){
 }
   containerGallery.insertAdjacentHTML("beforeend", createMarkup(data.hits));
   loading.classList.remove("hidden")
-if(data.hits.length * page < data.totalHits){
-    btnLoadMore.classList.replace("load-more-hidden", "button-load-more");
+  litebox.refresh(); 
+    const totalPages = Math.ceil(data.totalHits / per_page);
+
+
+
+if(page > totalPages){
+    btnLoadMore.classList.replace("button-load-more", "load-more-hidden");
+    litebox.refresh();
+}else{
+  btnLoadMore.classList.replace("load-more-hidden", "button-load-more");
 }
-  litebox.refresh();
+if(data.hits.length < per_page){
+  btnLoadMore.classList.replace("button-load-more", "load-more-hidden");
+  }
 
   })
    .catch((error) => {
 
     console.log(error.message);
     
-  // iziToast.error({
-  //   // title: 'Error',
-  //   message:   "Error fetching images. Please try again.", 
-  //   iconUrl: "../img/error.svg",  
-  //   iconColor: '#fff',
-  //   imageWidth: 15,
-  //   messageColor: '#fff',
-  //   titleColor: '#fff',
-  // });
+  iziToast.error({
+    // title: 'Error',
+    message: `${error.message}`, 
+    iconUrl: "../img/error.svg",  
+    iconColor: '#fff',
+    imageWidth: 15,
+    messageColor: '#fff',
+    titleColor: '#fff',
+  });
  })
 .finally (() => {
   event.target.reset()
   loading.classList.add("hidden")
 });
-let litebox = new SimpleLightbox('.gallery a', {
-  captionsData: 'alt',
-  captionDelay: 250,
-  captionClass: 'imageTitle',
-});
+ litebox.refresh()
 }
 
 
@@ -114,7 +118,10 @@ try{
 containerGallery.insertAdjacentHTML("beforeend", createMarkup(data.hits));
 loading.classList.remove("hidden");
 
-if(data.hits.length * page >= data.totalHits){
+const totalPages = Math.ceil(data.totalHits / per_page);
+console.log(page);
+
+if(page >= totalPages || !totalPages){
   btnLoadMore.classList.replace("button-load-more", "load-more-hidden");
   iziToast.error({
     // title: 'Error',
@@ -125,10 +132,11 @@ if(data.hits.length * page >= data.totalHits){
     messageColor: '#fff',
     titleColor: '#0099FF',
   });
-  if(data.hits.length < per_page){
-    btnLoadMore.classList.replace("load-more-hidden", "button-load-more");
-    }
-  }
+}
+  // if(data.hits.length < per_page){
+  //   btnLoadMore.classList.replace("button-load-more", "load-more-hidden");
+  //   }
+ 
 
 
 const card = document.querySelector(".img-list");
@@ -148,16 +156,10 @@ window.scrollBy({
   messageColor: '#fff',
   titleColor: '#0099FF',
 });
-} finally{btnLoadMore.disabled = false;
+} finally{
+  btnLoadMore.disabled = false;
   loading.classList.add("hidden");
  }
-let litebox = new SimpleLightbox('.gallery a', {
-  captionsData: 'alt',
-  captionDelay: 250,
-  captionClass: 'imageTitle',
-});
+ litebox.refresh()
+
  }
-
-
-
-

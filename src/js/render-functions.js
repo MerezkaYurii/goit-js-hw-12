@@ -55,8 +55,3 @@ if (!box) {
 export function clear() {
     containerGallery.innerHTML = "";
 }
-
-
-
-
-

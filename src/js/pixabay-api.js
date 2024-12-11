@@ -15,9 +15,6 @@ export async function serchCategory(categ, page = 1){
 
       }
    })
- 
-   
+    
   return response.data
 }
-
-
