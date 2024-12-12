@@ -27,12 +27,16 @@ const per_page = 15;
 let page = 1;
 let category ="";
 
- function submitInput (event) {
+
+
+
+
+async function submitInput (event) {
     event.preventDefault();
     // page = 1;
  category = event.target.elements.category.value.trim();
 
-                              containerGallery.innerHTML = ""; 
+   containerGallery.innerHTML = ""; 
 
 if(!category) {
   btnLoadMore.classList.replace("button-load-more", "load-more-hidden");
@@ -52,8 +56,9 @@ if(!category) {
 clear();
 loading.classList.remove("hidden");
   page = 1;
-serchCategory(category, page)
- .then( data => {
+ 
+ try {
+  const data = await serchCategory(category, page)
 if(!data.hits.length){
   btnLoadMore.classList.replace("button-load-more", "load-more-hidden");
   iziToast.error({
@@ -70,7 +75,8 @@ if(!data.hits.length){
   containerGallery.insertAdjacentHTML("beforeend", createMarkup(data.hits));
   loading.classList.remove("hidden")
   litebox.refresh(); 
-    const totalPages = Math.ceil(data.totalHits / per_page);
+  
+  const totalPages = Math.ceil(data.totalHits / per_page);
 
 
 
@@ -84,8 +90,8 @@ if(data.hits.length < per_page){
   btnLoadMore.classList.replace("button-load-more", "load-more-hidden");
   }
 
-  })
-   .catch((error) => {
+ 
+}catch{(error) => {
 
     console.log(error.message);
     
@@ -98,11 +104,11 @@ if(data.hits.length < per_page){
     messageColor: '#fff',
     titleColor: '#fff',
   });
- })
-.finally (() => {
+ }}
+finally  {
   event.target.reset()
   loading.classList.add("hidden")
-});
+};
  litebox.refresh()
 }
 
